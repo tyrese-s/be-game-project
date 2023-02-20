@@ -9,6 +9,8 @@ app.get('/', (req, res, next) => {
 
 app.get('/api/categories', getCategories);
 
+app.get('api/reviews')
+
 
 app.use((error, req, res, next) => {
     console.log(error);

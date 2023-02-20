@@ -20,35 +20,37 @@ describe('app', () => {
             .get('/')
             .expect(200)
             .then((body) => {
-                console.log(body.body.msg);
+               expect(body.body.msg).toBe('root ok');
             } )
         });
     });
     describe('GET /api/categories', () => {
-        test('200: GET responds with status 200 and array of category objects', () => {
+        test('200: GET responds with status 200 and array of category objects with correct properties', () => {
             return request(app)
             .get('/api/categories')
             .expect(200)
             .then(({body}) => {
-                console.log(body);
                 const categories = body
                 expect(categories).toBeInstanceOf(Array)
                 expect(categories.length).toBe(4)
-            })
-        })
-            test('200: GET responds with array of categories with correct properties', () => {
-                return request(app)
-                .get('/api/categories')
-                .expect(200)
-                .then(({body}) => {
-                    const categories = body
-                    categories.forEach((category) => {
-                        expect(category).toMatchObject({
-                            slug: expect.any(String),
-                            description: expect.any(String)
-                        })
+                categories.forEach((category) => {
+                    expect(category).toMatchObject({
+                        slug: expect.any(String),
+                        description: expect.any(String)
                     })
                 })
-            });
+            })
+        })
     });
+    // describe('GET /api/reviews', () => {
+    //     test('200: GET responds with status 200 and array of review objects', () => {
+    //         return request(app)
+    //         .get('/api/reviews')
+    //         .expect(200)
+    //         .then(({body}) => {
+    //             const reviews = body
+    //             expect(reviews).toBeInstanceOf(Array)
+    //         })
+    //     });
+    // });
 });
