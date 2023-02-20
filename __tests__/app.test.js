@@ -1,0 +1,54 @@
+const request = require('supertest')
+const app = require('../app')
+const connection = require('../db/connection')
+const seed = require('../db/seeds/seed')
+const testData = require('../db/data/test-data')
+
+beforeEach(()=> {
+    
+    return seed(testData)
+})
+afterAll(()=> {
+    connection.end()
+})
+
+
+describe('app', () => {
+    describe('GET /api', () => {
+        test('200: GET responds with a message of root ok', () => {
+            return request(app)
+            .get('/')
+            .expect(200)
+            .then((body) => {
+                console.log(body.body.msg);
+            } )
+        });
+    });
+    describe('GET /api/categories', () => {
+        test('200: GET responds with status 200 and array of category objects', () => {
+            return request(app)
+            .get('/api/categories')
+            .expect(200)
+            .then(({body}) => {
+                console.log(body);
+                const categories = body
+                expect(categories).toBeInstanceOf(Array)
+                expect(categories.length).toBe(4)
+            })
+        })
+            test('200: GET responds with array of categories with correct properties', () => {
+                return request(app)
+                .get('/api/categories')
+                .expect(200)
+                .then(({body}) => {
+                    const categories = body
+                    categories.forEach((category) => {
+                        expect(category).toMatchObject({
+                            slug: expect.any(String),
+                            description: expect.any(String)
+                        })
+                    })
+                })
+            });
+    });
+});
