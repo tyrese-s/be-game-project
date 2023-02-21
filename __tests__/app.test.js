@@ -69,4 +69,25 @@ describe('app', () => {
             })
         });
     });
-});
+    describe('GET /api/reviews/:review_id', () => {
+        test('200: GET responds status 200 and a review object', () => {
+            return request(app)
+            .get('/api/reviews/1')
+            .expect(200)
+            .then(({body}) => {
+                const review = body
+                expect(review.review_id).toBe(1)
+                expect(review).toMatchObject({
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url: expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                });
+            });
+        })
+    })
+})
