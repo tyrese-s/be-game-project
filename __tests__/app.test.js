@@ -76,7 +76,6 @@ describe('app', () => {
             .expect(200)
             .then(({body}) => {
                 const review = body
-                expect(review.review_id).toBe(1)
                 expect(review).toMatchObject({
                     title: expect.any(String),
                     designer: expect.any(String),
@@ -86,8 +85,40 @@ describe('app', () => {
                     category: expect.any(String),
                     created_at: expect.any(String),
                     votes: expect.any(Number),
+                    review_id: 1
                 });
             });
         })
-    })
+    });
+    describe('server errors', () => {
+        test('404: responds with 404 when send valid but non-existent path', () => {
+            return request(app)
+            .get('/notAPath4004')
+            .expect(404)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('Path not found')
+            })
+        });
+    });
+    describe('server errors', () => {
+        test('404: responds with 404 when send valid but non-existent path for reviews', () => {
+            return request(app)
+            .get('/api/reviews/4044444')
+            .expect(404)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('review not found')
+            })
+        });
+        test('400: responds with 400 and msg when incorrect id input', () => {
+            return request(app)
+            .get('/api/reviews/anything')
+            .expect(400)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('invalid input id')
+        });
+    });
+})
 })
