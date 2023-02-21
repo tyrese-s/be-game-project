@@ -19,8 +19,8 @@ describe('app', () => {
             return request(app)
             .get('/')
             .expect(200)
-            .then((body) => {
-               expect(body.body.msg).toBe('root ok');
+            .then(({body}) => {
+               expect(body.msg).toBe('root ok');
             } )
         });
     });
@@ -42,15 +42,28 @@ describe('app', () => {
             })
         })
     });
-    // describe('GET /api/reviews', () => {
-    //     test('200: GET responds with status 200 and array of review objects', () => {
-    //         return request(app)
-    //         .get('/api/reviews')
-    //         .expect(200)
-    //         .then(({body}) => {
-    //             const reviews = body
-    //             expect(reviews).toBeInstanceOf(Array)
-    //         })
-    //     });
-    // });
+    describe('GET /api/reviews', () => {
+        test('200: GET responds with status 200 and array of review objects', () => {
+            return request(app)
+            .get('/api/reviews')
+            .expect(200)
+            .then(({body}) => {
+                const reviews = body
+                expect(reviews).toBeInstanceOf(Array)
+                expect(reviews.length).toBe(13)
+                reviews.forEach((review) => {
+                    expect(review).toMatchObject({
+                        title: expect.any(String),
+                        designer: expect.any(String),
+                        owner: expect.any(String),
+                        review_img_url: expect.any(String),
+                        review_body: expect.any(String),
+                        category: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number)
+                    })
+                })
+            })
+        });
+    });
 });
