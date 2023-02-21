@@ -51,6 +51,7 @@ describe('app', () => {
                 const reviews = body
                 expect(reviews).toBeInstanceOf(Array)
                 expect(reviews.length).toBe(13)
+                expect(reviews).toBeSorted({descening: true})
                 reviews.forEach((review) => {
                     expect(review).toMatchObject({
                         title: expect.any(String),
@@ -60,7 +61,8 @@ describe('app', () => {
                         review_body: expect.any(String),
                         category: expect.any(String),
                         created_at: expect.any(String),
-                        votes: expect.any(Number)
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number)
                     })
                 })
             })
