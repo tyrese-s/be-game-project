@@ -52,6 +52,7 @@ describe('app', () => {
                 expect(reviews).toBeInstanceOf(Array)
                 expect(reviews.length).toBe(13)
                 expect(reviews).toBeSorted({descening: true})
+                expect(reviews[0].comment_count).toBe(1)
                 reviews.forEach((review) => {
                     expect(review).toMatchObject({
                         title: expect.any(String),
