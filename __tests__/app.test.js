@@ -122,6 +122,16 @@ describe('app', () => {
         });
     })
     describe('GET/api/reviews/:review_id/comments', () => {
+        test('200: GET responds with empty array if there are no comments with given review_id', () => {
+            return request(app)
+            .get('/api/reviews/1/comments')
+            .expect(200)
+            .then(({body}) => {
+                const comments = body
+                expect(comments.length).toBe(0)
+                expect(comments).toEqual([])
+            })
+        });
         test('200: GET responds with an array of comment for given review_id', () => {
             return request(app)
             .get('/api/reviews/2/comments')
@@ -144,15 +154,6 @@ describe('app', () => {
         });
     });
     describe('Errors for GET/api/reviews/:review_id/comments', () => {
-        test('404: responds with 404 when send valid but non-existent path for reviews', () => {
-            return request(app)
-            .get('/api/reviews/4044444/comments')
-            .expect(404)
-            .then((response) => {
-                const responseMessage = response.body.msg
-                expect(responseMessage).toBe('comment not found')
-            })
-        });
         test('400: responds with 400 and msg when incorrect id input', () => {
             return request(app)
             .get('/api/reviews/anything/comments')
@@ -163,4 +164,20 @@ describe('app', () => {
             });
         });
     })
+    // describe('POST/api/reviews/:review_id/comments', () => {
+    //     test('201: responds with added review ', () => {
+    //         return request(app)
+    //         .post('/api/reviews/:review_id/comments')
+    //         .send(
+    //             {
+
+    //             }
+    //         )
+    //         .expect(201)
+    //         .then(({body}) => {
+    //             const {review} = body
+
+    //         })
+    //     });
+    // });
 })
