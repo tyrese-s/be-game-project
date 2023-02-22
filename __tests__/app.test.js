@@ -69,4 +69,56 @@ describe('app', () => {
             })
         });
     });
-});
+    describe('GET /api/reviews/:review_id', () => {
+        test('200: GET responds status 200 and a review object', () => {
+            return request(app)
+            .get('/api/reviews/1')
+            .expect(200)
+            .then(({body}) => {
+                const review = body
+                expect(review).toMatchObject({
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url: expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    review_id: 1
+                });
+            });
+        })
+    });
+    describe('server errors', () => {
+        test('404: responds with 404 when send valid but non-existent path', () => {
+            return request(app)
+            .get('/notAPath4004')
+            .expect(404)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('Path not found')
+            })
+        });
+    });
+    describe('server errors', () => {
+        test('404: responds with 404 when send valid but non-existent path for reviews', () => {
+            return request(app)
+            .get('/api/reviews/4044444')
+            .expect(404)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('review not found')
+            })
+        });
+        test('400: responds with 400 and msg when incorrect id input', () => {
+            return request(app)
+            .get('/api/reviews/anything')
+            .expect(400)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('invalid input id')
+        });
+    });
+})
+})
