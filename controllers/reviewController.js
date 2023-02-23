@@ -37,10 +37,10 @@ exports.getCommentsByID = (req, res, next) => {
 
 exports.postComment = (req, res, next) => {
     const body = req.body
+    const passableKeys = {username: body.username, body: body.body}
     const {review_id} = req.params
-
     const validID = fetchReviewByID(review_id)
-    const newComment = newCommentPost((body))
+    const newComment = newCommentPost((passableKeys))
 
     Promise.all([validID, newComment])
     .then((newPost) => {

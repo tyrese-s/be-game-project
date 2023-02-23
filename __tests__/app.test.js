@@ -189,8 +189,25 @@ describe('app', () => {
             expect(review.author).toBe('mallionaire')
             expect(review.body).toBe('great game!')
         })
-    });     
+    }); 
+    test('201: responds with added review, additional properties in object are ignored', () => {
+        return request(app)
+        .post('/api/reviews/2/comments')
+        .send(
+        {
+            username: 'mallionaire',
+            body: 'great game!',
+            age: 23,
+            likesGames: true
+        }
+        )
+        .expect(201)
+        .then(({body}) => {
+            const review = body[0]
+        expect(review.author).toBe('mallionaire')
+        expect(review.body).toBe('great game!')    
     });
+})
     describe('Errors for POST/api/reviews/:review_id/comments', () => {
         test('400: responds with 400 when sending body with missing fields ', () => {
             return request(app)
@@ -240,6 +257,7 @@ describe('app', () => {
                 const responseMessage = response.body.msg
                 expect(responseMessage).toBe('review id not found')
     })
+})
 })
 })
 })
