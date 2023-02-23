@@ -56,6 +56,10 @@ exports.patchReview = (req, res, next) => {
     const passableKeysBody ={inc_votes: body.inc_votes}
     const {review_id} = req.params
 
+    if(typeof passableKeysBody.inc_votes !== "number"){
+        res.status(400).send({msg: 'not a number'})
+    }
+
     const validID = fetchReviewByID(review_id)
     const outgoingPatch = newVotePatch(passableKeysBody, review_id)
 

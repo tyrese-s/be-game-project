@@ -296,14 +296,14 @@ describe('app', () => {
             })
         });
         describe('Errors for PATCH/api/reviews/:review_id', () => {
-            test('400: responds with 400 when sending body with missing fields ', () => {
+            test('400: responds with 400 when sending body inc_votes not a number', () => {
                 return request(app)
                 .patch('/api/reviews/2')
-                .send({})
+                .send({inc_votes: 'apples'})
                 .expect(400)
                 .then((response) => {
                     const responseMessage = response.body.msg
-                    expect(responseMessage).toBe('missing/incorrect fields!')
+                    expect(responseMessage).toBe('not a number')
                 })
             })
             test('404: responds with 404 when send valid but non-existent path for reviews', () => {
