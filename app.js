@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
-
+app.use(express.json())
 const {getCategories} = require('./controllers/categoryController')
-const {getReviews, getReviewByID, getCommentsByID} = require('./controllers/reviewController')
+const {getReviews, getReviewByID, getCommentsByID, postComment} = require('./controllers/reviewController')
 
 const {handleCustomErrors, psqlErrors} = require('./errorController')
 
@@ -19,7 +19,7 @@ app.get('/api/reviews/:review_id', getReviewByID)
 
 app.get('/api/reviews/:review_id/comments', getCommentsByID)
 
-// app.post('/api/reviews/:review_id/comments', postComment)
+app.post('/api/reviews/:review_id/comments', postComment)
 
 app.use('*', (req, res, next) => {
     res.status(404).send({msg: 'Path not found'})
