@@ -108,7 +108,7 @@ describe('app', () => {
             .expect(404)
             .then((response) => {
                 const responseMessage = response.body.msg
-                expect(responseMessage).toBe('review not found')
+                expect(responseMessage).toBe('review id not found')
             })
         });
         test('400: responds with 400 and msg when incorrect id input', () => {
@@ -160,7 +160,7 @@ describe('app', () => {
             .expect(404)
             .then((response) => {
             const responseMessage = response.body.msg
-            expect(responseMessage).toBe('review not found')
+            expect(responseMessage).toBe('review id not found')
     })
 });
         test('400: responds with 400 and msg when incorrect id input', () => {
@@ -173,4 +173,91 @@ describe('app', () => {
             });
         });
     })
+    describe('POST/api/reviews/:review_id/comments', () => {
+        test('201: responds with added review ', () => {
+            return request(app)
+            .post('/api/reviews/2/comments')
+            .send(
+            {
+                username: 'mallionaire',
+                body: 'great game!'
+            }
+            )
+            .expect(201)
+            .then(({body}) => {
+                const review = body[0]
+            expect(review.author).toBe('mallionaire')
+            expect(review.body).toBe('great game!')
+        })
+    }); 
+    test('201: responds with added review, additional properties in object are ignored', () => {
+        return request(app)
+        .post('/api/reviews/2/comments')
+        .send(
+        {
+            username: 'mallionaire',
+            body: 'great game!',
+            age: 23,
+            likesGames: true
+        }
+        )
+        .expect(201)
+        .then(({body}) => {
+            const review = body[0]
+        expect(review.author).toBe('mallionaire')
+        expect(review.body).toBe('great game!')    
+    });
+})
+    describe('Errors for POST/api/reviews/:review_id/comments', () => {
+        test('400: responds with 400 when sending body with missing fields ', () => {
+            return request(app)
+            .post('/api/reviews/2/comments')
+            .send({})
+            .expect(400)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('missing/incorrect fields!')
+            })
+        });
+        test('400: responds with 400 when sending body has invalid inputs', () => {
+            return request(app)
+            .post('/api/reviews/2/comments')
+            .send({
+                username: 'tyrese',
+                body: 'nice'
+            })
+            .expect(400)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('missing/incorrect fields!')
+        });
+    });
+        test('400: responds with 400 and msg when incorrect id input', () => {
+            return request(app)
+            .post('/api/reviews/notANum/comments')
+            .send({
+                username: 'mallionaire',
+                body: 'nice game'
+            })
+            .expect(400)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('invalid input id')
+            });
+        });
+        test('404: responds with 404 when send valid but non-existent path for reviews', () => {
+            return request(app)
+            .post('/api/reviews/1100110/comments')
+            .send({
+                username: 'mallionaire',
+                body: 'nice game'
+            })
+            .expect(404)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('review id not found')
+    })
+})
+})
+})
 })

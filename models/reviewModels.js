@@ -34,7 +34,7 @@ exports.fetchReviewByID = (reviewID) => {
     .then((result) => {
         
         if(result.rows.length === 0){
-            return Promise.reject({status: 404, msg: 'review not found'})
+            return Promise.reject({status: 404, msg: 'review id not found'})
         }
         return result.rows
     })
@@ -49,5 +49,20 @@ exports.fetchCommentsByID = (reviewID) => {
     id)
     .then((result) => {
         return result.rows 
+    })
+}
+
+exports.newCommentPost = (newComment) => {
+    const {username, body} = newComment
+    return  db.query(`
+    INSERT INTO comments
+    (author, body, review_id)
+    VALUES
+    ((SELECT username FROM users WHERE username=$1 ),
+    $2, (SELECT review_id FROM reviews WHERE title='Jenga'))
+    RETURNING *;`,
+    [username, body])
+    .then((result) => {
+        return  result.rows
     })
 }
