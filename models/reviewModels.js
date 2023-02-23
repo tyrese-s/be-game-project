@@ -66,3 +66,15 @@ exports.newCommentPost = (newComment) => {
         return  result.rows
     })
 }
+
+exports.newVotePatch = (incVote, id) => {
+    return db.query(
+    `UPDATE reviews
+    SET votes = votes + $1
+    WHERE review_id = $2
+    RETURNING *;`,
+    [incVote.inc_votes, id])
+    .then((result) => {
+        return result.rows[0]
+    })
+}

@@ -260,4 +260,72 @@ describe('app', () => {
 })
 })
 })
+    describe('PATCH/api/reviews/:review_id', () => {
+        test('200: increment: responds with updated votes in review', () => {
+            return request(app)
+            .patch('/api/reviews/2')
+            .send({inc_votes: 5})
+            .expect(200)
+            .then(({body}) => {
+                const updatedReview = body
+                expect (updatedReview.votes).toBe(10)
+            })
+        });
+        test('200: decrement: responds with updated votes in review, decerement', () => {
+            return request(app)
+            .patch('/api/reviews/4')
+            .send({inc_votes: -4})
+            .expect(200)
+            .then(({body}) => {
+                const updatedReview = body
+                expect (updatedReview.votes).toBe(3)
+            })
+        });
+        test('200: only a body containing the key of inc_votes can be inputted', () => {
+            return request(app)
+            .patch('/api/reviews/2')
+            .send({
+                inc_votes: 5,
+                new_name: 'the avatar'
+            })
+            .expect(200)
+            .then(({body}) => {
+                const updatedReview = body
+                expect (updatedReview.votes).toBe(10)
+                expect(updatedReview.new_name).toBe(undefined)
+            })
+        });
+        describe('Errors for PATCH/api/reviews/:review_id', () => {
+            test('400: responds with 400 when sending body with missing fields ', () => {
+                return request(app)
+                .patch('/api/reviews/2')
+                .send({})
+                .expect(400)
+                .then((response) => {
+                    const responseMessage = response.body.msg
+                    expect(responseMessage).toBe('missing/incorrect fields!')
+                })
+            })
+            test('404: responds with 404 when send valid but non-existent path for reviews', () => {
+                return request(app)
+                .patch('/api/reviews/1100110')
+                .send({inc_votes: 5})
+                .expect(404)
+                .then((response) => {
+                    const responseMessage = response.body.msg
+                    expect(responseMessage).toBe('review id not found')
+        })
+        });
+        test('400: responds with 400 and msg when incorrect id input', () => {
+            return request(app)
+            .patch('/api/reviews/notANum')
+            .send({inc_votes: 5})
+            .expect(400)
+            .then((response) => {
+                const responseMessage = response.body.msg
+                expect(responseMessage).toBe('invalid input id')
+            });
+        });
+    });
+})
 })

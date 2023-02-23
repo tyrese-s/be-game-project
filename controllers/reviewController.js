@@ -1,4 +1,4 @@
-const {fetchReviews, fetchReviewByID, fetchCommentsByID, newCommentPost, checkReviewExists} = require('../models/reviewModels')
+const {fetchReviews, fetchReviewByID, fetchCommentsByID, newCommentPost, newVotePatch} = require('../models/reviewModels')
 
 exports.getReviews = (req, res, next) => {
     fetchReviews().then((reviews) => {
@@ -48,5 +48,22 @@ exports.postComment = (req, res, next) => {
     })
     .catch((err) => {
         next(err)
+    })
+}
+
+exports.patchReview = (req, res, next) => {
+    const body = req.body
+    const passableKeysBody ={inc_votes: body.inc_votes}
+    const {review_id} = req.params
+
+    const validID = fetchReviewByID(review_id)
+    const outgoingPatch = newVotePatch(passableKeysBody, review_id)
+
+    Promise.all([validID, outgoingPatch])
+    .then((result) => {
+        res.status(200).send(result[1])
+    })
+    .catch((err) => {
+    next(err)
     })
 }
