@@ -1,7 +1,35 @@
 const db = require('../db/connection')
 
 
-exports.fetchReviews = () => {
+exports.fetchReviews = (sort_by = 'created_at', order = 'DESC' , category) => {
+    const validSortBy = ['title', 'designer', 'owner', 'category', 'review_body', 'created_at', 'votes']
+    const validCategories = ['euro game', 'dexterity', 'social dedction'] 
+    const validOrders = ['ASC', 'DESC']
+    // [valid order opts]
+    // if sortby/order === elem in passed arr, .includes()
+    if(!validCategories.includes(category) || !validSortBy.includes(sort_by) || !validOrders.includes(order)){
+        return Promise.reject({status: 400, msg: 'invalid query'})
+    }
+    // promise.reject() if not included
+
+    const QueryValues = []
+    // [query values] 
+    QueryValues.push(category)
+    QueryValues.push(sort_by)
+    QueryValues.push(order)
+    
+    console.log(QueryValues);
+
+    let baseqQueryStr = `SELECT * FROM reviews`
+    let additionalQueryStr =  ` WHERE category = $1 ORDER BY $2 $3;`
+    if(category){
+        const fullQueryStr = baseqQueryStr += additionalQueryStr
+    }
+    
+    // base query str select all from reviews with comments
+    // conditional checks if review has += WHERE reviews.category = $1
+    // += GROUP BY reviews(reviewid) comments(reviewid) ORDER BY (sort_by) (order)
+    // db.query basequerystr + queryvalues
     return db.query(`
     ALTER TABLE reviews
     ADD comment_count INT; 
@@ -78,3 +106,27 @@ exports.newVotePatch = (incVote, id) => {
         return result.rows[0]
     })
 }
+
+// exports.fetchReviewsByCategory= (category) => {
+//     return db.query(`
+//     SELECT * FROM reviews
+//     WHERE category = $1;`, 
+//     [category])
+//     .then((result) => {
+//         return result.rows
+//     })
+// }
+
+// exports.fetchReviewsBySortBy =(sort_by) => {
+//     // const {sort_by} = query
+//    console.log(sort_by);
+//     return db.query(`
+//     SELECT * FROM reviews
+//     ORDER BY $1;`, [sort_by]
+//     )
+//     .then((result) => {
+//         console.log(result.rows);
+//         return result.rows
+//     })
+// }
+

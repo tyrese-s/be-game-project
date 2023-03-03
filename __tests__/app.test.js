@@ -347,4 +347,49 @@ describe('app', () => {
             })
         });
     });
+    describe('GET/api/reviews (queries)', () => {
+        test('responds with array of reviews by category ', () => {
+            return request(app)
+            .get('/api/reviews?category=dexterity')
+            .expect(200)
+            .then(({body}) => {
+                const review = body
+                expect(review.length).toBe(1)
+                // expect(review[0].category).toBe('dexterity')
+            })
+        });
+        test.only('responds with array of reviews with a sort_by query which sort by any valid column', () => {
+            return request(app)
+            .get('/api/reviews?sort_by=title')
+            .expect(200)
+            .then(({body}) => {
+                const reviews = body
+                expect(reviews).toBeInstanceOf(Array)
+                expect(reviews.length).toBe(13)
+                expect(reviews).toBeSorted({key: 'title'})
+                reviews.forEach((review) => {
+                    expect(review).toMatchObject({
+                        title: expect.any(String),
+                        designer: expect.any(String),
+                        owner: expect.any(String),
+                        review_img_url: expect.any(String),
+                        review_body: expect.any(String),
+                        category: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number)
+                    })
+            });
+        })
+    });
+        test('responds with array of reviews with a sort_by which defaults to date', () => {
+            return request(app)
+            .get('/api/reviews?sort_by')
+            .expect(200)
+            .then(({body}) => {
+                const reviews = body
+                expect(reviews).toBeInstanceOf(Array)
+                expect(reviews.length).toBe(13)
+            });
+        });
+})
 })

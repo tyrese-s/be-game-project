@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 const {getCategories} = require('./controllers/categoryController')
-const {getReviews, getReviewByID, getCommentsByID, postComment, patchReview} = require('./controllers/reviewController')
+const {getReviews, getReviewByID, getCommentsByID, postComment, patchReview, getReviewsByQuery} = require('./controllers/reviewController')
 const {getUsers} = require('./controllers/usersController')
 const {handleCustomErrors, psqlErrors} = require('./errorController')
 
@@ -12,6 +12,8 @@ app.get('/', (req, res, next) => {
 
 
 app.get('/api/categories', getCategories);
+
+// app.get('/api/reviews', getReviewsByQuery)
 
 app.get('/api/reviews', getReviews)
 

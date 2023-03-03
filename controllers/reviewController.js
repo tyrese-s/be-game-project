@@ -1,7 +1,8 @@
-const {fetchReviews, fetchReviewByID, fetchCommentsByID, newCommentPost, newVotePatch} = require('../models/reviewModels')
+const {fetchReviews, fetchReviewByID, fetchCommentsByID, newCommentPost, newVotePatch, fetchReviewsByCategory, fetchReviewsBySortBy} = require('../models/reviewModels')
 
 exports.getReviews = (req, res, next) => {
-    fetchReviews().then((reviews) => {
+    const {sort_by, order, category} = req.query
+    fetchReviews(sort_by, order, category).then((reviews) => {
         res.status(200).send(reviews)
     })
     .catch((err) => {
@@ -71,3 +72,20 @@ exports.patchReview = (req, res, next) => {
     next(err)
     })
 }
+
+// exports.getReviewsByQuery = (req, res, next) => {
+//     const query = req.query
+//     if(query.hasOwnProperty('category')){
+//         const {category} = query
+//         console.log(category, '<-- from contoller, query');
+//         fetchReviewsByCategory(category).then((reviews) => {
+//             res.status(200).send(reviews)
+//         })
+//     } else if (query.hasOwnProperty('sort_by')){
+//         const {sort_by} = query
+//         fetchReviewsBySortBy(sort_by).then((reviews) => {
+//             res.status(200).send(reviews)
+//     })
+   
+// }
+// }
