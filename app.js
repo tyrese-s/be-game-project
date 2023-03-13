@@ -1,11 +1,12 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 app.use(express.json())
 const {getCategories} = require('./controllers/categoryController')
 const {getReviews, getReviewByID, getCommentsByID, postComment, patchReview, getReviewsByQuery} = require('./controllers/reviewController')
 const {getUsers} = require('./controllers/usersController')
 const {handleCustomErrors, psqlErrors} = require('./errorController')
-
+app.use(cors())
 app.get('/', (req, res, next) => {
     res.status(200).send({msg: 'root ok'})
 })
