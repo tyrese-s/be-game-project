@@ -43,31 +43,31 @@ describe('app', () => {
         })
     });
     describe('GET /api/reviews', () => {
-        // test('200: GET responds with status 200 and array of review objects', () => {
-        //     return request(app)
-        //     .get('/api/reviews')
-        //     .expect(200)
-        //     .then(({body}) => {
-        //         const reviews = body
-        //         expect(reviews).toBeInstanceOf(Array)
-        //         expect(reviews.length).toBe(13)
-        //         expect(reviews).toBeSorted({descening: true})
-        //         expect(reviews[0].comment_count).toBe(1)
-        //         reviews.forEach((review) => {
-        //             expect(review).toMatchObject({
-        //                 title: expect.any(String),
-        //                 designer: expect.any(String),
-        //                 owner: expect.any(String),
-        //                 review_img_url: expect.any(String),
-        //                 review_body: expect.any(String),
-        //                 category: expect.any(String),
-        //                 created_at: expect.any(String),
-        //                 votes: expect.any(Number),
-        //                 comment_count: expect.any(Number)
-        //             })
-        //         })
-        //     })
-        // });
+        test('200: GET responds with status 200 and array of review objects', () => {
+            return request(app)
+            .get('/api/reviews')
+            .expect(200)
+            .then(({body}) => {
+                const reviews = body
+                expect(reviews).toBeInstanceOf(Array)
+                expect(reviews.length).toBe(13)
+                expect(reviews).toBeSorted({descening: true})
+                expect(reviews[0].comment_count).toBe(1)
+                reviews.forEach((review) => {
+                    expect(review).toMatchObject({
+                        title: expect.any(String),
+                        designer: expect.any(String),
+                        owner: expect.any(String),
+                        review_img_url: expect.any(String),
+                        review_body: expect.any(String),
+                        category: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(Number)
+                    })
+                })
+            })
+        });
     });
     describe('server errors', () => {
         test('404: responds with 404 when send valid but non-existent path', () => {

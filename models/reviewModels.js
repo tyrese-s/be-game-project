@@ -2,29 +2,29 @@ const db = require('../db/connection')
 
 
 exports.fetchReviews = (sort_by = 'created_at', order = 'DESC' , category) => {
-    const validSortBy = ['title', 'designer', 'owner', 'category', 'review_body', 'created_at', 'votes']
-    const validCategories = ['euro game', 'dexterity', 'social dedction'] 
-    const validOrders = ['ASC', 'DESC']
-    // [valid order opts]
-    // if sortby/order === elem in passed arr, .includes()
-    if(!validCategories.includes(category) || !validSortBy.includes(sort_by) || !validOrders.includes(order)){
-        return Promise.reject({status: 400, msg: 'invalid query'})
-    }
-    // promise.reject() if not included
+    // const validSortBy = ['title', 'designer', 'owner', 'category', 'review_body', 'created_at', 'votes']
+    // const validCategories = ['euro game', 'dexterity', 'social dedction'] 
+    // const validOrders = ['ASC', 'DESC']
+    // // [valid order opts]
+    // // if sortby/order === elem in passed arr, .includes()
+    // if(!validCategories.includes(category) || !validSortBy.includes(sort_by) || !validOrders.includes(order)){
+    //     return Promise.reject({status: 400, msg: 'invalid query'})
+    // }
+    // // promise.reject() if not included
 
-    const QueryValues = []
-    // [query values] 
-    QueryValues.push(category)
-    QueryValues.push(sort_by)
-    QueryValues.push(order)
+    // const QueryValues = []
+    // // [query values] 
+    // QueryValues.push(category)
+    // QueryValues.push(sort_by)
+    // QueryValues.push(order)
     
-    console.log(QueryValues);
+    // console.log(QueryValues);
 
-    let baseqQueryStr = `SELECT * FROM reviews`
-    let additionalQueryStr =  ` WHERE category = $1 ORDER BY $2 $3;`
-    if(category){
-        const fullQueryStr = baseqQueryStr += additionalQueryStr
-    }
+    // let baseqQueryStr = `SELECT * FROM reviews`
+    // let additionalQueryStr =  ` WHERE category = $1 ORDER BY $2 $3;`
+    // if(category){
+    //     const fullQueryStr = baseqQueryStr += additionalQueryStr
+    // }
     
     // base query str select all from reviews with comments
     // conditional checks if review has += WHERE reviews.category = $1
