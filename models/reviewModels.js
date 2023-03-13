@@ -48,6 +48,7 @@ exports.fetchReviews = (sort_by = 'created_at', order = 'DESC' , category) => {
     SELECT * FROM reviews
     ORDER BY created_at DESC;`)
     .then((result) => {
+        console.log(result.rows);
         return result.rows
         })
     })
