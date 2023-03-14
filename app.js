@@ -36,7 +36,7 @@ app.use(handleCustomErrors)
 app.use(psqlErrors)
 
 app.use((error, req, res, next) => {
-    res.status(500).send('server error!', console.log(error))
+    res.status(500).send('server error!')
 })
 
 module.exports = app
