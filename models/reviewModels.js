@@ -29,7 +29,6 @@ exports.fetchReviews = (sort_by = "created_at", order = "DESC", category) => {
   baseQueryStr += ` GROUP BY reviews.review_id, comments.review_id ORDER BY ${sort_by} ${order};`;
 
   return db.query(baseQueryStr, QueryValues).then((result) => {
-    console.log(result.rows);
     return result.rows;
   });
 };
@@ -66,7 +65,7 @@ exports.fetchCommentsByID = (reviewID) => {
     });
 };
 
-exports.newCommentPost = (newComment) => {
+exports.newCommentPost = (newComment, review_id) => {
   const { username, body } = newComment;
   return db
     .query(
@@ -75,9 +74,9 @@ exports.newCommentPost = (newComment) => {
     (author, body, review_id)
     VALUES
     ((SELECT username FROM users WHERE username=$1 ),
-    $2, (SELECT review_id FROM reviews WHERE title='Jenga'))
+    $2, $3)
     RETURNING *;`,
-      [username, body]
+      [username, body, review_id]
     )
     .then((result) => {
       return result.rows;
